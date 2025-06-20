@@ -18,6 +18,7 @@ This repository contains a solution for reducing Azure Cosmos DB costs by archiv
 - `blob_container_setup.ps1` – Blob setup script
 
  Architecture Diagram
+ 
                       ┌─────────────────────────────┐
                       │         Clients / API        │
                       └────────────┬────────────────┘
