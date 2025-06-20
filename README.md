@@ -1,4 +1,4 @@
-# ymplique-Solutions.
+# Symplique-Solutions.
 azure-cost-opt-billing-records
 
 # Azure Billing Record Cost Optimization
