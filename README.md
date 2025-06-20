@@ -17,20 +17,24 @@ This repository contains a solution for reducing Azure Cosmos DB costs by archiv
 - `write_handler.py` – Insert new records
 - `blob_container_setup.ps1` – Blob setup script
 
-                         +-------------------------+
-                         |      Azure Function     | <------+
-                         |   (Read/Write Handler)  |        |
-                         +-------------------------+        |
-                                 |                           |
-                 +---------------+---------------+           |
-                 |                               |           |
-      +----------v--------+           +----------v----------+
-      |   Cosmos DB (Hot) |           | Azure Blob Storage  |
-      |  (Recent < 3 mo)  |           | (Archive > 3 mo)     |
-      +-------------------+           +----------------------+
-                 |                               ^
-        +--------v--------+             +--------+--------+
-        | Azure Durable   |             | Azure Function   |
-        | Function Timer  |             | (Cold Record     |
-        | (Archiver Logic)|             | Retriever Proxy) |
-        +-----------------+             +------------------+
+ Architecture Diagram
+                      ┌─────────────────────────────┐
+                      │         Clients / API        │
+                      └────────────┬────────────────┘
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │     Azure Function App       │
+                    │ (Read/Write Billing Records) │
+                    └───────┬──────────┬───────────┘
+                            │          │
+         ┌──────────────────▼──┐   ┌───▼─────────────────┐
+         │  Cosmos DB (Hot DB) │   │ Azure Blob Storage  │
+         │ Recent < 90 days    │   │ Archive > 90 days   │
+         └──────────▲──────────┘   └──────────┬──────────┘
+                    │                         │
+       ┌────────────┴─────────────┐      ┌─────▼────────────────────┐
+       │ Azure Durable Function   │◄─────┤ Timer-based Archiver Job │
+       └──────────────────────────┘      └──────────────────────────┘
+
+
+       
