@@ -1,3 +1,4 @@
+# Azure Durable Function to archive old billing records from Cosmos DB to Blob Storage
 import datetime
 import azure.functions as func
 import logging
